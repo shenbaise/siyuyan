@@ -11,6 +11,8 @@
 
 	<!-- 以静态变量保存ApplicationContext -->
 	<bean class="org.siyuyan.core.SpringContextHolder" lazy-init="false" />
+
 	<context:component-scan base-package="org.siyuyan.*" />
+	<aop:aspectj-autoproxy />
 	
 </beans>
