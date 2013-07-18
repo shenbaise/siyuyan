@@ -8,6 +8,7 @@ import java.util.HashMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.elasticsearch.action.search.SearchResponse;
 import org.siyuyan.core.BaseController;
 import org.siyuyan.es.Searcher;
 import org.springframework.stereotype.Controller;
@@ -43,8 +44,10 @@ public class TestController extends BaseController {
 	
 	@RequestMapping(value="me",method=RequestMethod.GET)
 	public String batchDeld(String s, HttpServletRequest request,HttpServletResponse response) throws Exception{
-		System.out.println("h哈哈llo");
-		System.out.println(request.getParameter("s"));
+		HashMap<String, Object> map2 = new HashMap<>();
+		map2.put("nd", 2010);
+		SearchResponse sr = searcher.query(map2);
+		System.out.println(sr.toString());
 		return "index";
 	}
 }

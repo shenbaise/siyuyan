@@ -56,7 +56,11 @@ public class ESClient {
 	}
 
 	public static void distroy() {
-		client.close();
+		if(null!=client)
+			client.close();
 	}
-
+	
+	public static void main(String[] args) {
+		System.out.println("...");
+	}
 }

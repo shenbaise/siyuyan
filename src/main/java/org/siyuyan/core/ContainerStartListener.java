@@ -18,7 +18,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 public class ContainerStartListener implements ServletContextListener{
 
 	public void contextDestroyed(ServletContextEvent arg0) {
-//		ESClient.distroy();
+		ESClient.distroy();
 	}
 
 
