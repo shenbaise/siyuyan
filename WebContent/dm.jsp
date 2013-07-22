@@ -11,7 +11,7 @@
 				<c:forEach var="item" items="${facet}"> 
 					<c:forEach var="item2" items="${item}"> 
 						<li>
-							<a href="${item2.key }">${item2.key }(${item2.value })</a>
+							<a href="${ctx }/category/dm/${item2.key }">${item2.key }(${item2.value })</a>
 						</li>
 					</c:forEach>
 				</c:forEach>
@@ -47,7 +47,7 @@
 			
 			<ul class="thumbnails">
 			<c:forEach var="item" items="${film}">			
-				<li class="span4">
+				<li class="span3">
 					<div class="thumbnail">
 						<img alt="300x200" src="${item.img }" class="img-rounded">
 						<div class="caption">
@@ -63,71 +63,6 @@
 			</c:forEach>
 			</ul>
 			
-			<div class="navbar">
-				<div class="navbar-inner">
-					<div class="container-fluid">
-						<a href="#" class="brand">热门电视剧</a>
-						<div class="nav-collapse collapse navbar-responsive-collapse">
-							<ul class="nav pull-right">
-								<li class="divider-vertical" />
-								<li>
-									<a href="#">更多</a>
-								</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-			<ul class="thumbnails">
-			<c:forEach var="item" items="${tv}">			
-				<li class="span4">
-					<div class="thumbnail">
-						<img alt="200x200" src="${item.img }">
-						<div class="caption">
-							<h4>
-								${item.name }
-							</h4>
-							<p>
-								<a class="btn btn-primary" href="#">播放</a> <a class="btn" href="#">下载</a>
-							</p>
-						</div>
-					</div>
-				</li>
-			</c:forEach>
-			</ul>
-			
-			<div class="navbar">
-				<div class="navbar-inner">
-					<div class="container-fluid">
-						<a href="#" class="brand">热门综艺节目</a>
-						<div class="nav-collapse collapse navbar-responsive-collapse">
-							<ul class="nav pull-right">
-								<li class="divider-vertical" />
-								<li>
-									<a href="#">更多</a>
-								</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-			<ul class="thumbnails">
-			<c:forEach var="item" items="${zy}">			
-				<li class="span4">
-					<div class="thumbnail">
-						<img alt="200x200" src="${item.img }">
-						<div class="caption">
-							<h4>
-								${item.name }
-							</h4>
-							<p>
-								<a class="btn btn-primary" href="#">播放</a> <a class="btn" href="#">下载</a>
-							</p>
-						</div>
-					</div>
-				</li>
-			</c:forEach>
-			</ul>
 		</div>
 		
 		<!-- 右部 -->
