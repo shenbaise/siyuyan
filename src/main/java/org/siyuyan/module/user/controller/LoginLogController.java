@@ -57,7 +57,10 @@ public class LoginLogController extends BaseController{
 	 * @throws Exception
 	 */
 	@RequestMapping(value="{id}/del",method=RequestMethod.GET)
-	public String del(@PathVariable Long id,HttpServletRequest request) throws Exception{
+	public String delss(@PathVariable Long id,HttpServletRequest request) throws Exception{
+		
+		System.out.println("ll...");
+		
 		return "redirect:../list.do";
 	}
 	/**

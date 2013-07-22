@@ -15,36 +15,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.siyuyan.module.user.controller;
-
-import java.util.HashMap;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.siyuyan.core.BaseController;
-import org.siyuyan.es.Searcher;
-import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
-
 /**
  * @author whiteme
- * @date 2013年7月17日
- * @desc facet查询
+ * @date 2013年7月18日
+ * @desc 
  */
-@Controller("facetController")
-@RequestMapping("facet")
-public class FacetController extends BaseController {
-	
-	Searcher searcher = new Searcher();
-	
-	@RequestMapping(value="nd")
-	public String nd(HttpServletRequest request,HttpServletResponse response) throws Exception{
-		
-		HashMap<String, Integer> m = searcher.facet();
-		request.setAttribute("facet", m);
-		request.setAttribute("catgoryName","年代");
-		return "../index";
-	}
-}
+package org.siyuyan.module.web.service;
