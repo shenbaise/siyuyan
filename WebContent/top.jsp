@@ -49,11 +49,12 @@
 </head>
 
 <body>
-<div class="container-fluid">
+<div class="container">
+    
 	<!-- top bar -->
 	<div class="navbar navbar-inverse">
 		<div class="navbar-inner">
-			<div class="container-fluid">
+			<div class="container">
 				 <a data-target=".navbar-responsive-collapse" data-toggle="collapse" class="btn btn-navbar"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a> <a href="www.siyuyan.com" class="brand">死鱼眼</a>
 				<div class="nav-collapse collapse navbar-responsive-collapse">
 					<ul class="nav">
@@ -82,28 +83,20 @@
 							<a href="${ctx }/hot">热门</a>
 						</li>
 						<li class="divider-vertical">
-						<li>
+						<div class="pull-left">
 							<div class="input-append">
 							<form class="navbar-search form-inline">
-								<input class="span3" type="text" /> <button type="submit" class="btn btn-primary"><i class="icon-search icon-white"></i></button>
+								<input class="span2" type="text" /> <button type="submit" class="btn btn-primary"><i class="icon-search icon-white"></i></button>
 							</form>
 							</div>
-						</li>
+						</div>
 						
-						<li>
-							<a href="#"><span class="badge badge-info">接上次播放</span></a>
-						</li>
 					</ul>
 					
 					<ul class="nav pull-right">
-						<li>
-							<a href="#">右边链接</a>
-						</li>
-						<li class="divider-vertical">
-						</li>
-						<li class="dropdown">
-							 <a data-toggle="dropdown" class="dropdown-toggle" href="#">shenbaise<strong class="caret"></strong></a>
-							<ul class="dropdown-menu">
+						<div class="btn-group navbar-inverse">
+							<button class='btn' type='submit'>shenbaise</button><button class="btn dropdown-toggle" type='submit' data-toggle="dropdown"><span class='caret'></span></button>
+							<ul class='dropdown-menu'>
 								<li>
 									<a href="#">个人资料</a>
 								</li>
@@ -119,11 +112,12 @@
 									<a href="#logout">注销</a>
 								</li>
 							</ul>
-						</li>
+						</div>
 					</ul>
 				</div>
 			</div>
 		</div>
 	</div>
+	
 	<!-- end of top bar -->
 			

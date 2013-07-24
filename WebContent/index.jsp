@@ -55,7 +55,7 @@
 								${item.name }
 							</h4>
 							<p>
-								<a class="btn btn-primary" href="#">播放</a> <a class="btn" href="#">下载</a>
+								<a class="btn btn-primary" href="${ctx }/html/player.html?none&${item.d }">播放</a> <a class="btn" href="#">下载</a>
 							</p>
 						</div>
 					</div>
