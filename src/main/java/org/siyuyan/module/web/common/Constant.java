@@ -15,33 +15,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.siyuyan.utils;
-
-import java.util.HashMap;
+package org.siyuyan.module.web.common;
 
 /**
  * @author whiteme
- * @date 2013年7月21日
- * @desc 
+ * @date 2013年7月23日
+ * @desc 系统常量
  */
-public class UrlMapper {
+public class Constant {
 	
-	public static HashMap<String, String> mapper = new HashMap<>();
-	static {
-		mapper.put("film", "电影");
-		mapper.put("tv", "电视剧");
-		mapper.put("zy", "综艺");
-		mapper.put("music", "音乐");
-		mapper.put("dm", "动漫");
-		mapper.put("电影", "film");
-		mapper.put("电视剧", "tv");
-		mapper.put("综艺", "zy");
-		mapper.put("音乐", "music");
-		mapper.put("动漫", "dm");
-	}
-	
-	
-	public static String get(String key){
-		return mapper.get(key);
-	}
-}
+	public static int defaultPageSize = 20;
+}	

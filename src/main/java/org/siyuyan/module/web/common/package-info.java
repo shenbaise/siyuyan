@@ -15,33 +15,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.siyuyan.utils;
-
-import java.util.HashMap;
-
 /**
  * @author whiteme
- * @date 2013年7月21日
+ * @date 2013年7月23日
  * @desc 
  */
-public class UrlMapper {
-	
-	public static HashMap<String, String> mapper = new HashMap<>();
-	static {
-		mapper.put("film", "电影");
-		mapper.put("tv", "电视剧");
-		mapper.put("zy", "综艺");
-		mapper.put("music", "音乐");
-		mapper.put("dm", "动漫");
-		mapper.put("电影", "film");
-		mapper.put("电视剧", "tv");
-		mapper.put("综艺", "zy");
-		mapper.put("音乐", "music");
-		mapper.put("动漫", "dm");
-	}
-	
-	
-	public static String get(String key){
-		return mapper.get(key);
-	}
-}
+package org.siyuyan.module.web.common;
