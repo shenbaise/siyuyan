@@ -1,3 +1,11 @@
+package org.siyuyan.module.web.model;
+
+import java.util.List;
+import java.util.Set;
+import java.util.TreeMap;
+
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * ########################  SHENBAISE'S WORK  ##########################
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -15,86 +23,349 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.siyuyan.module.web.model;
-
-import java.util.HashMap;
 
 /**
  * @author whiteme
  * @date 2013年7月18日
- * @desc 
+ * @desc 影片对象，直接转换为json，提交到es。
  */
 public class Movie {
-	
-	public static HashMap<String, String> infoName = new HashMap<>();
-	{
-		infoName.put("片　　名", "pm");
-		infoName.put("片　名", "pm");
-		infoName.put("片名", "pm");
-		infoName.put("译　　名", "ym");
-		infoName.put("译　名", "ym");
-		infoName.put("译名", "ym");
-		infoName.put("国　　家", "gj");
-		infoName.put("国　家", "gj");
-		infoName.put("国家", "gj");
-		infoName.put("地　　区", "gj");
-		infoName.put("地　区", "gj");
-		infoName.put("出品时间", "nd");
-		infoName.put("制片地区", "dq");
-		infoName.put("编剧", "bj");
-		infoName.put("集数", "gj");
-		infoName.put("监制", "gj");
-		infoName.put("类　　别", "lb");
-		infoName.put("类　别", "lb");
-		infoName.put("类别", "lb");
-		infoName.put("监制", "gj");
-		infoName.put("类　　型", "lb");
-		infoName.put("类　型", "lb");
-		infoName.put("类型", "lb");
-		infoName.put("语　　言", "yy");
-		infoName.put("语　言", "yy");
-		infoName.put("语言", "yy");
-		infoName.put("字　　幕", "zm");
-		infoName.put("字　幕", "zm");
-		infoName.put("字幕", "zm");
-		infoName.put("文件格式", "gs");
-		infoName.put("视频尺寸", "cc");
-		infoName.put("IMDB评分", "imdb-pf");
-		infoName.put("评　　分", "pf");
-		infoName.put("评　分", "pf");
-		infoName.put("评分", "pf");
-		infoName.put("文件大小", "dx");
-		infoName.put("片　　长", "pc");
-		infoName.put("片　长", "pc");
-		infoName.put("片长", "pc");
-		infoName.put("导　　演", "dy");
-		infoName.put("导　演", "dy");
-		infoName.put("导演", "dy");
-		infoName.put("主　　演", "zy");
-		infoName.put("主　演", "zy");
-		infoName.put("主演", "zy");
-		infoName.put("简　　介", "jq");
-		infoName.put("简　介", "jq");
-		infoName.put("剧情介绍", "jq");
-		infoName.put("下载地址", "xzdz");
-		infoName.put("在线观看", "zzdz");
-		infoName.put("年　　代", "nd");
-		infoName.put("年代", "nd");
-		infoName.put("时间", "pc");
-		infoName.put("音频", "yy");
-		infoName.put("演员", "zy");
+	public Movie() {
 	}
-	
-	public static HashMap<String, String> model = new HashMap<>();
-	{
-		model.put("pm","片名");
-		model.put("gj", "国家");
-		model.put("nd", "年代");
-		model.put("dy", "导演");
-		model.put("zy", "主演");
-		model.put("lb", "类别");
-		model.put("jq", "简介");
-		model.put("d", "下载地址");
-		model.put("k", "在线观看");
+
+	/**
+	 * 主键，使用片名或者片名的拼音
+	 */
+	private String id;
+	/**
+	 * 影片名称、可省略
+	 */
+	private String title;
+	/**
+	 * 影片翻译名称（别名）
+	 */
+	private String translation;
+	/**
+	 * 国家
+	 */
+	private String nation;
+	/**
+	 * 地区
+	 */
+	private String area;
+	/**
+	 * 出品时间
+	 */
+	private String publishTime;
+	/**
+	 * 分类（电影，电视剧，综艺等）
+	 */
+	private String category;
+	/**
+	 * 影片类型（动作、爱情、科幻等）
+	 */
+	private Set<String> type;
+	/**
+	 * 集数
+	 */
+	private int number;
+	/**
+	 * 制片人
+	 */
+	private String studioManager;
+	/**
+	 * 导演
+	 */
+	private String director;
+	/**
+	 * 主演
+	 */
+	private Set<String> actors;
+	/**
+	 * 影片长度
+	 */
+	private int duration;
+	/**
+	 * 语言
+	 */
+	private String lang;
+	/**
+	 * 评分
+	 */
+	private float score;
+	/**
+	 * 视频尺寸 1024*768
+	 */
+	private String size;
+	/**
+	 * 年代
+	 */
+	private int year;
+	/**
+	 * 简介
+	 */
+	private String summary;
+	/**
+	 * 缩略图（在存储到es时下载并压缩图像）
+	 */
+	private String thumbnail;
+
+	/**
+	 * 下载资源
+	 */
+	private TreeMap<String, List<String>> download;
+	/**
+	 * 在线观看资源
+	 */
+	private TreeMap<String, List<String>> online;
+
+	public static void main(String[] args) {
+		System.out.println("Hello World!");
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getTranslation() {
+		return translation;
+	}
+
+	public void setTranslation(String translation) {
+		this.translation = translation;
+	}
+
+	public String getNation() {
+		return nation;
+	}
+
+	public void setNation(String nation) {
+		this.nation = nation;
+	}
+
+	public String getArea() {
+		return area;
+	}
+
+	public void setArea(String area) {
+		this.area = area;
+	}
+
+	public String getPublishTime() {
+		return publishTime;
+	}
+
+	public void setPublishTime(String publishTime) {
+		this.publishTime = publishTime;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	public Set<String> getType() {
+		return type;
+	}
+
+	public void setType(Set<String> type) {
+		this.type = type;
+	}
+
+	public int getNumber() {
+		return number;
+	}
+
+	public void setNumber(int number) {
+		this.number = number;
+	}
+
+	public String getStudioManager() {
+		return studioManager;
+	}
+
+	public void setStudioManager(String studioManager) {
+		this.studioManager = studioManager;
+	}
+
+	public String getDirector() {
+		return director;
+	}
+
+	public void setDirector(String director) {
+		this.director = director;
+	}
+
+	public Set<String> getActors() {
+		return actors;
+	}
+
+	public void setActors(Set<String> actors) {
+		this.actors = actors;
+	}
+
+	public int getDuration() {
+		return duration;
+	}
+
+	public void setDuration(int duration) {
+		this.duration = duration;
+	}
+
+	public String getLang() {
+		return lang;
+	}
+
+	public void setLang(String lang) {
+		this.lang = lang;
+	}
+
+	public float getScore() {
+		return score;
+	}
+
+	public void setScore(float score) {
+		this.score = score;
+	}
+
+	public String getSize() {
+		return size;
+	}
+
+	public void setSize(String size) {
+		this.size = size;
+	}
+
+	public int getYear() {
+		return year;
+	}
+
+	public void setYear(int year) {
+		this.year = year;
+	}
+
+	public String getSummary() {
+		return summary;
+	}
+
+	public void setSummary(String summary) {
+		this.summary = summary;
+	}
+
+	public String getThumbnail() {
+		return thumbnail;
+	}
+
+	public void setThumbnail(String thumbnail) {
+		this.thumbnail = thumbnail;
+	}
+
+	public TreeMap<String, List<String>> getDownload() {
+		return download;
+	}
+
+	public void setDownload(TreeMap<String, List<String>> download) {
+		this.download = download;
+	}
+
+	public TreeMap<String, List<String>> getOnline() {
+		return online;
+	}
+
+	public void setOnline(TreeMap<String, List<String>> online) {
+		this.online = online;
+	}
+
+	/**
+	 * 合并2个movie
+	 */
+	public void merge(Movie movie) {
+		if (StringUtils.isNotBlank(movie.getTranslation())) {
+			this.translation = movie.getTranslation();
+		}
+		if (StringUtils.isNotBlank(movie.getNation())) {
+			this.nation = movie.getNation();
+		}
+		if (StringUtils.isNotBlank(movie.getArea())) {
+			this.area = movie.getArea();
+		}
+		if (StringUtils.isNotBlank(movie.getPublishTime())) {
+			this.publishTime = movie.getPublishTime();
+		}
+		if (StringUtils.isNotBlank(movie.getCategory())) {
+			this.category = movie.getCategory();
+		}
+		if (movie.getNumber() > this.number) {
+			this.number = movie.getNumber();
+		}
+		if (StringUtils.isNotBlank(movie.getStudioManager())) {
+			this.studioManager = movie.getStudioManager();
+		}
+		if (StringUtils.isNotBlank(movie.getLang())) {
+			this.lang = movie.getLang();
+		}
+		if (StringUtils.isNotBlank(movie.getDirector())) {
+			this.director = movie.getDirector();
+		}
+		if (movie.getDuration() > 0) {
+			this.duration = movie.getDuration();
+		}
+		if (null != movie.getType() && movie.getType().size() > 0) {
+			if (this.type != null) {
+				this.type.addAll(movie.getType());
+			} else
+				this.type = movie.getType();
+		}
+		if (null != movie.getActors() && movie.getActors().size() > 0) {
+			if (null != this.actors) {
+				this.actors.addAll(movie.getActors());
+			} else
+				this.actors = movie.getActors();
+		}
+		if (movie.getScore() > 0) {
+			this.score = movie.getScore();
+		}
+		if (StringUtils.isBlank(this.size)
+				&& StringUtils.isNotBlank(movie.getSize())) {
+			this.size = movie.getSize();
+		}
+		if (movie.getYear() > 0) {
+			this.year = movie.getYear();
+		}
+		if (StringUtils.isBlank(this.summary)
+				&& StringUtils.isNotBlank(movie.getSummary())) {
+			this.summary = movie.getSummary();
+		}
+		if (StringUtils.isBlank(this.thumbnail)
+				&& StringUtils.isNotBlank(movie.getThumbnail())) {
+			this.thumbnail = movie.getThumbnail();
+		}
+		if (null != movie.getDownload() && movie.getDownload().size() > 0) {
+			if (this.download != null) {
+				this.download.putAll(movie.getDownload());
+			} else
+				this.download = movie.getDownload();
+		}
+		if (null != movie.getOnline() && movie.getOnline().size() > 0) {
+			if (this.online != null) {
+				this.online.putAll(movie.getOnline());
+			} else
+				this.online = movie.getOnline();
+		}
 	}
 }

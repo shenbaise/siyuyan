@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
+import org.siyuyan.module.web.common.Constant;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.beans.propertyeditors.CustomNumberEditor;
 import org.springframework.stereotype.Controller;
@@ -42,7 +43,39 @@ public class BaseController {
         request.setAttribute("query", paraMap);
         return paraMap;
 	}
-	
+	/**
+	 * @param page
+	 * @param size
+	 * @return
+	 * start pos
+	 */
+	public static int getStartPage(Integer page,Integer size){
+		return (page-1)*size;
+	}
+	/**
+	 * @param page
+	 * @return
+	 * @desc 页码
+	 */
+	public int getPage(Integer page){
+		if(page==null)
+			page = 1;
+		if(page<0)
+			page = 1;
+		return page;
+	}
+	/**
+	 * @param size
+	 * @return
+	 * @desc 每页大小
+	 */
+	public static int getSize(Integer size){
+		if(size==null)
+			size = Constant.defaultPageSize;
+		if(size<=0)
+			size = Constant.defaultPageSize;
+		return size;
+	}
 	
 	/**
 	 * 定制参数绑定

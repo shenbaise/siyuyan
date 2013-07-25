@@ -25,4 +25,5 @@ package org.siyuyan.module.web.common;
 public class Constant {
 	
 	public static int defaultPageSize = 20;
+	public static int defaultPageGroup = 10;
 }	

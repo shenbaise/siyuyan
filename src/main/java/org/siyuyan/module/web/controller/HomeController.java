@@ -35,9 +35,12 @@ import org.elasticsearch.search.facet.terms.TermsFacet;
 import org.elasticsearch.search.sort.SortOrder;
 import org.siyuyan.core.BaseController;
 import org.siyuyan.es.Searcher;
+import org.siyuyan.module.web.common.Constant;
 import org.siyuyan.module.web.service.FacetService;
 import org.siyuyan.utils.CharUtil;
+import org.siyuyan.utils.Pagination;
 import org.siyuyan.utils.SearchResponseUtil;
+import org.siyuyan.utils.StringHelper;
 import org.siyuyan.utils.UrlMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -52,14 +55,15 @@ import com.google.common.collect.Maps;
  * @date 2013年7月20日
  * @desc 主页信息
  */
-@Controller(value="homeController")
-public class HomeController extends BaseController{
-	
+@Controller(value = "homeController")
+public class HomeController extends BaseController {
+
 	private Searcher searcher = new Searcher();
 	@Autowired
-	private FacetService facetService ;
+	private FacetService facetService;
 	@Autowired
 	private SearchResponseUtil util;
+
 	/**
 	 * @param request
 	 * @param response
@@ -67,182 +71,217 @@ public class HomeController extends BaseController{
 	 * @throws Exception
 	 * @desc 首页
 	 */
-	@RequestMapping(value="/")
-	public String home(HttpServletRequest request,HttpServletResponse response) throws Exception{
+	@RequestMapping(value = "/")
+	public String home(HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
 		// 最近收录的影片
 		SearchResponse sr = searcher.newMovies(10);
 		request.setAttribute("newFilm", util.processSearchRespons(sr));
-		
+
 		// 首页facet，按大类分，默认是安装count排序的
 		HashMap<String, String> map = Maps.newHashMap();
 		map.put("f", "t");
-		sr = searcher.facet(map,null,15);
+		sr = searcher.facet(map, null, 15);
 		Facet f = sr.getFacets().facetsAsMap().get("f");
 		request.setAttribute("catgoryName", "分类");
 		request.setAttribute("facet", util.processFacetResult((TermsFacet) f));
-		
+
 		// 电影
 		HashMap<String, Object> query = new HashMap<>();
 		query.put("t", "电影");
 		sr = searcher.query(query, "nd", SortOrder.DESC, 0, 3);
 		SearchHit[] sh = sr.getHits().getHits();
-		List<HashMap<String,Object>> film = Lists.newArrayList();
-		for(SearchHit h:sh){
+		List<HashMap<String, Object>> film = Lists.newArrayList();
+		for (SearchHit h : sh) {
 			HashMap<String, Object> m = new HashMap<>();
 			m.put("name", h.getId());
 			Map<String, Object> source = h.getSource();
-			if(null!=source){
-				HashMap<String, Object> dList = (HashMap<String, Object>) source.get("d");
-				if(null!=dList && dList.size()>0){
+			if (null != source) {
+				HashMap<String, Object> dList = (HashMap<String, Object>) source
+						.get("d");
+				if (null != dList && dList.size() > 0) {
 					m.put("d", dList);
 				}
 				List<String> mList = (List<String>) source.get("img");
-				if(null!=mList && mList.size()>0){
+				if (null != mList && mList.size() > 0) {
 					m.put("img", mList.get(0));
 				}
 			}
 			film.add(m);
 		}
 		request.setAttribute("film", film);
-		
+
 		// 电视剧
 		HashMap<String, Object> query2 = new HashMap<>();
 		query2.put("t", "电视剧");
 		sr = searcher.query(query2, "nd", SortOrder.DESC, 0, 3);
 		sh = sr.getHits().getHits();
-		List<HashMap<String,Object>> tv = new ArrayList<>();
-		for(SearchHit h:sh){
+		List<HashMap<String, Object>> tv = new ArrayList<>();
+		for (SearchHit h : sh) {
 			HashMap<String, Object> m = Maps.newHashMap();
 			m.put("name", h.getId());
 			Map<String, Object> source = h.getSource();
-			if(null!=source){
-				HashMap<String, Object> dList = (HashMap<String, Object>) source.get("d");
-				if(null!=dList && dList.size()>0){
+			if (null != source) {
+				HashMap<String, Object> dList = (HashMap<String, Object>) source
+						.get("d");
+				if (null != dList && dList.size() > 0) {
 					m.put("d", dList);
 				}
 				List<String> mList = (List<String>) source.get("img");
-				if(null!=mList && mList.size()>0){
+				if (null != mList && mList.size() > 0) {
 					m.put("img", mList.get(0));
 				}
 			}
-			
+
 			tv.add(m);
 		}
 		request.setAttribute("tv", tv);
-		
+
 		// 综艺
 		HashMap<String, Object> query3 = new HashMap<>();
 		query3.put("t", "综艺");
 		sr = searcher.query(query3, "nd", SortOrder.DESC, 0, 3);
 		sh = sr.getHits().getHits();
-		List<HashMap<String,Object>> zy = Lists.newArrayList();
-		for(SearchHit h:sh){
+		List<HashMap<String, Object>> zy = Lists.newArrayList();
+		for (SearchHit h : sh) {
 			HashMap<String, Object> m = new HashMap<>();
 			m.put("name", h.getId());
 			Map<String, Object> source = h.getSource();
-			if(null!=source){
-				HashMap<String, Object> dList = (HashMap<String, Object>) source.get("d");
-				if(null!=dList && dList.size()>0){
+			if (null != source) {
+				HashMap<String, Object> dList = (HashMap<String, Object>) source
+						.get("d");
+				if (null != dList && dList.size() > 0) {
 					m.put("d", dList);
 				}
 				List<String> mList = (List<String>) source.get("img");
-				if(null!=mList && mList.size()>0){
-					
+				if (null != mList && mList.size() > 0) {
+
 					m.put("img", mList.get(0));
-					if(mList.size()>1){
+					if (mList.size() > 1) {
 						m.put("img", mList.get(1));
 					}
 				}
 			}
-			
+
 			zy.add(m);
 		}
 		request.setAttribute("zy", zy);
 		return "index";
 	}
-	
-	@RequestMapping(value="{category}")
-	public String home2(@PathVariable String category,Integer page,Integer size,HttpServletRequest request,HttpServletResponse response) throws Exception{
-		if(StringUtils.isNotBlank(category)){
-			category = new String(category.getBytes("iso8859-1"),"utf-8");
-		if(!CharUtil.isChinese(category)){
-			category = UrlMapper.get(category);
-		}
-		// 电影
-		HashMap<String, Object> query = new HashMap<>();
-		query.put("t", category);
-		SearchResponse sr = searcher.query(query, "_timestamp", SortOrder.DESC, 0, 20);
-		SearchHit[] sh = sr.getHits().getHits();
-		List<HashMap<String,Object>> film = Lists.newArrayList();
-		for(SearchHit h:sh){
-			HashMap<String, Object> m = new HashMap<>();
-			m.put("name", h.getId());
-			Map<String, Object> source = h.getSource();
-			if(null!=source){
-				HashMap<String, Object> dList = (HashMap<String, Object>) source.get("d");
-				if(null!=dList && dList.size()>0){
-					m.put("d", dList);
-				}
-				List<String> mList = (List<String>) source.get("img");
-				if(null!=mList && mList.size()>0){
-					m.put("img", mList.get(0));
-				}
+
+	@RequestMapping(value = "{category}")
+	public String home2(@PathVariable String category, Integer page,
+			Integer size, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		
+		if (StringUtils.isNotBlank(category)) {
+			category = StringHelper.isoToUtf8(category);
+			if (!CharUtil.isChinese(category)) {
+				category = UrlMapper.get(category);
 			}
-			film.add(m);
+			// 电影
+			HashMap<String, Object> query = new HashMap<>();
+			query.put("t", category);
+			SearchResponse sr = searcher.query(query, "_timestamp",
+					SortOrder.DESC,
+					getStartPage(page = getPage(page), size = getSize(size)),
+					size);
+			SearchHit[] sh = sr.getHits().getHits();
+			List<HashMap<String, Object>> film = Lists.newArrayList();
+			for (SearchHit h : sh) {
+				HashMap<String, Object> m = new HashMap<>();
+				m.put("name", h.getId());
+				Map<String, Object> source = h.getSource();
+				if (null != source) {
+					HashMap<String, Object> dList = (HashMap<String, Object>) source
+							.get("d");
+					if (null != dList && dList.size() > 0) {
+						m.put("d", dList);
+					}
+					List<String> mList = (List<String>) source.get("img");
+					if (null != mList && mList.size() > 0) {
+						m.put("img", mList.get(0));
+					}
+				}
+				film.add(m);
+			}
+			
+			// 分页信息
+			int total = (int) sr.getHits().totalHits();
+			int num = sr.getHits().getHits().length;
+			if(num==0)
+				total = 0;
+			Pagination pagination = new Pagination(Constant.defaultPageGroup, page, Constant.defaultPageSize, total);
+			request.setAttribute("pager", pagination.getPagination());
+						
+			// 最近收录的影片
+			sr = searcher.newMovies(10);
+			
+			request.setAttribute("film", film);
+			request.setAttribute("newFilm", util.processSearchRespons(sr));
+			// 首页facet，按类别分默认是安装count排序的
+			request.setAttribute("catgoryName", "分类");
+			request.setAttribute("facet",
+					facetService.facetSubcategory(category, 15));
+			request.setAttribute("page", page);
 		}
-		request.setAttribute("film", film);
 		
-		// 最近收录的影片
-		sr = searcher.newMovies(10);
-		request.setAttribute("newFilm", util.processSearchRespons(sr));
-		
-		// 首页facet，按类别分默认是安装count排序的
-		request.setAttribute("catgoryName", "分类");
-		request.setAttribute("facet", facetService.facetSubcategory(category, 15));
-		}
-		if(CharUtil.isChinese(category))
+		if (CharUtil.isChinese(category))
 			category = UrlMapper.get(category);
 		return category;
 	}
-	
-	@RequestMapping(value="new")
-	public String film(Integer page,Integer size,HttpServletRequest request,HttpServletResponse response) throws Exception{
+
+	@RequestMapping(value = "new")
+	public String film(Integer page, Integer size, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
 		// 最新电影
 		HashMap<String, Object> query = new HashMap<>();
 		query.put("t", "电影");
-		SearchResponse sr = searcher.query(query, "_timestamp", SortOrder.DESC, 0, 20);
+		SearchResponse sr = searcher.query(query, "_timestamp", SortOrder.DESC,
+				getStartPage(page = getPage(page), size = getSize(size)),
+				size);
 		SearchHit[] sh = sr.getHits().getHits();
-		List<HashMap<String,Object>> film = new ArrayList<>();
-		for(SearchHit h:sh){
+		List<HashMap<String, Object>> film = new ArrayList<>();
+		for (SearchHit h : sh) {
 			HashMap<String, Object> m = new HashMap<>();
 			m.put("name", h.getId());
 			Map<String, Object> source = h.getSource();
-			if(null!=source){
-				HashMap<String, Object> dList = (HashMap<String, Object>) source.get("d");
-				if(null!=dList && dList.size()>0){
+			if (null != source) {
+				HashMap<String, Object> dList = (HashMap<String, Object>) source
+						.get("d");
+				if (null != dList && dList.size() > 0) {
 					m.put("d", dList);
 				}
 				List<String> mList = (List<String>) source.get("img");
-				if(null!=mList && mList.size()>0){
+				if (null != mList && mList.size() > 0) {
 					m.put("img", mList.get(0));
 				}
 			}
 			film.add(m);
 		}
 		request.setAttribute("film", film);
-		
+		// 分页信息
+		int total = (int) sr.getHits().totalHits();
+		int num = sr.getHits().getHits().length;
+		if(num==0)
+			total = 0;
+		Pagination pagination = new Pagination(Constant.defaultPageGroup, page, Constant.defaultPageSize, total);
+		request.setAttribute("pager", pagination.getPagination());
 		// 最近收录的影片
 		sr = searcher.newMovies(10);
 		request.setAttribute("newFilm", util.processSearchRespons(sr));
-		
+
 		// 首页facet，按类别分默认是安装count排序的
 		request.setAttribute("catgoryName", "分类");
 		request.setAttribute("facet", facetService.facetSubcategory("电影", 15));
+		request.setAttribute("page", page);
+		
 		return "film";
 	}
-	
+
 	/**
 	 * 电视剧
+	 * 
 	 * @param page
 	 * @param size
 	 * @param request
@@ -250,42 +289,52 @@ public class HomeController extends BaseController{
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value="hot")
-	public String hot(Integer page,Integer size,HttpServletRequest request,HttpServletResponse response) throws Exception{
+	@RequestMapping(value = "hot")
+	public String hot(Integer page, Integer size, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
 		// 最热电影
 		HashMap<String, Object> query = new HashMap<>();
 		query.put("t", "电影");
-		SearchResponse sr = searcher.query(query, "nd", SortOrder.DESC, 0, 20);
+		SearchResponse sr = searcher.query(query, "nd", SortOrder.DESC, 
+				getStartPage(page = getPage(page), size = getSize(size)),
+				size);
 		SearchHit[] sh = sr.getHits().getHits();
-		List<HashMap<String,Object>> film = new ArrayList<>();
-		for(SearchHit h:sh){
+		List<HashMap<String, Object>> film = new ArrayList<>();
+		for (SearchHit h : sh) {
 			HashMap<String, Object> m = new HashMap<>();
 			m.put("name", h.getId());
 			Map<String, Object> source = h.getSource();
-			if(null!=source){
-				HashMap<String, Object> dList = (HashMap<String, Object>) source.get("d");
-				if(null!=dList && dList.size()>0){
+			if (null != source) {
+				HashMap<String, Object> dList = (HashMap<String, Object>) source
+						.get("d");
+				if (null != dList && dList.size() > 0) {
 					m.put("d", dList);
 				}
 				List<String> mList = (List<String>) source.get("img");
-				if(null!=mList && mList.size()>0){
+				if (null != mList && mList.size() > 0) {
 					m.put("img", mList.get(0));
 				}
 			}
 			film.add(m);
 		}
 		request.setAttribute("film", film);
-		
+		// 分页信息
+		int total = (int) sr.getHits().totalHits();
+		int num = sr.getHits().getHits().length;
+		if(num==0)
+			total = 0;
+		Pagination pagination = new Pagination(Constant.defaultPageGroup, page, Constant.defaultPageSize, total);
+		request.setAttribute("pager", pagination.getPagination());
 		// 最近收录的影片
 		sr = searcher.newMovies(10);
 		request.setAttribute("newFilm", util.processSearchRespons(sr));
-		
+
 		// 首页facet，按类别分默认是安装count排序的
 		request.setAttribute("catgoryName", "分类");
 		request.setAttribute("facet", facetService.facetSubcategory("电影", 15));
+		request.setAttribute("page", page);
 		
 		return "tv";
 	}
-	
-	
+
 }
