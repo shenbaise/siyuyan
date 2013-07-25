@@ -45,8 +45,10 @@
 				</div>
 			</div>
 			
-			<ul class="thumbnails">
-			<c:forEach var="item" items="${film}">			
+			<c:forEach var="item" items="${film}" varStatus="i">
+			<c:if test="${i.index % 4 == 0 }">
+				<ul class="thumbnails">
+			</c:if>			
 				<li class="span3">
 					<div class="thumbnail">
 						<img alt="300x200" src="${item.img }" class="img-rounded">
@@ -60,9 +62,11 @@
 						</div>
 					</div>
 				</li>
+			<c:if test="${(i.index+1) % 4 == 0 }">
+				</ul>
+			</c:if>
 			</c:forEach>
-			</ul>
-			
+			${pager }
 		</div>
 		
 		<!-- 右部 -->

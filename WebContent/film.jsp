@@ -31,62 +31,29 @@
 			<!-- 推荐影片 -->
 			<div class="navbar">
 				<div class="navbar-inner">
-					<div class="container-fluid">
-						<a href="#" class="brand">热门电影</a>
-						<div class="nav-collapse collapse navbar-responsive-collapse">
-							<ul class="nav pull-right">
-								<li class="divider-vertical" />
-								<li>
-									<a href="#">更多</a>
-								</li>
-							</ul>
-						</div>
-					</div>
+					<a class="brand">热门电影</a>
 				</div>
 			</div>
-			
-			<ul class="thumbnails">
-			<c:forEach var="item" items="${film}">			
+			<c:forEach var="item" items="${film}" varStatus="i">
+			<c:if test="${i.index % 4 == 0 }">
+				<ul class="thumbnails">
+			</c:if>
 				<li class="span3">
-					<div class="thumbnail">
-						<img alt="300x200" src="${item.img }" class="img-rounded">
+					<div class="thumbnail hover_img">
+						<img alt="300x200" src="${ctx}/static/simple.jpg" class="img-rounded">
 						<div class="caption">
-							<h4>
 								${item.name }
-							</h4>
 							<p>
 								<a class="btn btn-primary" href="#">播放</a> <a class="btn" href="#">下载</a>
 							</p>
 						</div>
 					</div>
 				</li>
+			<c:if test="${(i.index+1) % 4 == 0 }">
+				</ul>
+			</c:if>
 			</c:forEach>
-			</ul>
-			<div class="pagination pagination-centered pagination-large">
-			<ul>
-				<li>
-					<a href="#">上一页</a>
-				</li>
-				<li>
-					<a href="#">1</a>
-				</li>
-				<li>
-					<a href="#">2</a>
-				</li>
-				<li>
-					<a href="#">3</a>
-				</li>
-				<li>
-					<a href="#">4</a>
-				</li>
-				<li>
-					<a href="#">5</a>
-				</li>
-				<li>
-					<a href="#">下一页</a>
-				</li>
-			</ul>
-		</div>
+		${pager }
 		</div>
 		
 		<!-- 右部 -->
