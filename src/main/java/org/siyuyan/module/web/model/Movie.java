@@ -1,11 +1,3 @@
-package org.siyuyan.module.web.model;
-
-import java.util.List;
-import java.util.Set;
-import java.util.TreeMap;
-
-import org.apache.commons.lang3.StringUtils;
-
 /**
  * ########################  SHENBAISE'S WORK  ##########################
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -23,6 +15,13 @@ import org.apache.commons.lang3.StringUtils;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.siyuyan.module.web.model;
+
+import java.util.List;
+import java.util.Set;
+import java.util.TreeMap;
+
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author whiteme
