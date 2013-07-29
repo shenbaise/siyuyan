@@ -55,7 +55,7 @@
 								${item.name }
 							</h4>
 							<p>
-								<a class="btn btn-primary" href="${ctx }/html/player.html?none&${item.d }">播放</a> <a class="btn" href="#">下载</a>
+								<a class="btn btn-primary" href="${ctx }/play/${item.name }">播放</a>
 							</p>
 						</div>
 					</div>
@@ -88,7 +88,7 @@
 								${item.name }
 							</h4>
 							<p>
-								<a class="btn btn-primary" href="#">播放</a> <a class="btn" href="#">下载</a>
+								<a class="btn btn-primary" href="${ctx }/play/${item.name }">播放</a>
 							</p>
 						</div>
 					</div>
@@ -121,7 +121,7 @@
 								${item.name }
 							</h4>
 							<p>
-								<a class="btn btn-primary" href="#">播放</a> <a class="btn" href="#">下载</a>
+								<a class="btn btn-primary" href="${ctx }/play/${item.name }">播放</a>
 							</p>
 						</div>
 					</div>
@@ -154,4 +154,14 @@
 			</ol>
 		</div>
 	</div>
+	<!-- BEGIN CORE PLUGINS -->
+	<script src="${ctx}/js/jquery-1.10.1.min.js" type="text/javascript"></script>
+	<!-- IMPORTANT! Load jquery-ui-1.10.1.custom.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
+	<script src="${ctx}/js/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>      
+	<script src="${ctx}/js/bootstrap.min.js" type="text/javascript"></script>
+	<!--[if lt IE 9]>
+	<script src="${ctx}/js/excanvas.min.js"></script>
+	<script src="${ctx}/js/respond.min.js"></script>  
+	<![endif]-->   
+	<script src="${ctx}/js/jquery.blockui.min.js" type="text/javascript"></script>  
 <%@include file="bottom.jsp"%>

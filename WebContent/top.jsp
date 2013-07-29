@@ -1,11 +1,15 @@
 <!DOCTYPE html>
-<html lang="zh">
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<html class="not-ie" lang="en">
+<!--<![endif]-->
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <head>
   <meta charset="utf-8">
@@ -85,17 +89,30 @@
 						<li class="divider-vertical">
 						<div class="pull-left">
 							<div class="input-append">
-							<form class="navbar-search form-inline">
-								<input class="span2" type="text" /> <button type="submit" class="btn btn-primary"><i class="icon-search icon-white"></i></button>
+							<form class="navbar-search form-inline" action="s">
+								<input class="span2" name="wd" type="text" value="${wd }" /> <button type="submit" class="btn btn-primary"><i class="icon-search">搜</i></button>
 							</form>
 							</div>
 						</div>
 						
 					</ul>
 					
+					<c:if test="${sessionScope.userSession==null }">
+					<ul class="nav pull-right">
+						<li>
+							<a href="${ctx }/login">登录</a>
+						</li>
+						<li class="divider">
+						<li>
+							<a href="${ctx }/register">注册</a>
+						</li>
+					</ul>
+					</c:if>
+					
+					<c:if test="${sessionScope.userSession!=null }">
 					<ul class="nav pull-right">
 						<div class="btn-group navbar-inverse">
-							<button class='btn' type='submit'>shenbaise</button><button class="btn dropdown-toggle" type='submit' data-toggle="dropdown"><span class='caret'></span></button>
+							<button class='btn' type='submit'>${sessionScope.userSession.username }</button><button class="btn dropdown-toggle" type='submit' data-toggle="dropdown"><span class='caret'></span></button>
 							<ul class='dropdown-menu'>
 								<li>
 									<a href="#">个人资料</a>
@@ -109,11 +126,12 @@
 								<li class="divider">
 								</li>
 								<li>
-									<a href="#logout">注销</a>
+									<a href="logout">注销</a>
 								</li>
 							</ul>
 						</div>
 					</ul>
+					</c:if>
 				</div>
 			</div>
 		</div>
