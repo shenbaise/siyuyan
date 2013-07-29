@@ -42,6 +42,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.google.common.base.CharMatcher;
+
 /**
  * @author whiteme
  * @date 2013年7月21日
@@ -65,8 +67,8 @@ public class CategoryController extends BaseController {
 			t = StringHelper.isoToUtf8(t);
 			lb = StringHelper.isoToUtf8(lb);
 			HashMap<String, Object> query = new HashMap<>();
-			query.put("t", UrlMapper.get(t));
-			query.put("lb", lb);
+			query.put("category", UrlMapper.get(t));
+			query.put("type", lb);
 			SearchResponse sr = searcher.query(query, "_timestamp", SortOrder.DESC,
 					getStartPage(page=getPage(page), size=getSize(size)), size);
 			int total = (int) sr.getHits().totalHits();
@@ -78,17 +80,18 @@ public class CategoryController extends BaseController {
 			List<HashMap<String,Object>> film = new ArrayList<>();
 			for(SearchHit h:sh){
 				HashMap<String, Object> m = new HashMap<>();
-				m.put("name", h.getId());
+				String name = h.getId();
+				if(name.contains("/")){
+					name = CharMatcher.anyOf("/").replaceFrom(name, "|");
+				}
+				m.put("name", name);
 				Map<String, Object> source = h.getSource();
 				if(null!=source){
-					HashMap<String, Object> dList = (HashMap<String, Object>) source.get("d");
+					HashMap<String, Object> dList = (HashMap<String, Object>) source.get("download");
 					if(null!=dList && dList.size()>0){
-						m.put("d", dList);
+						m.put("download", dList);
 					}
-					List<String> mList = (List<String>) source.get("img");
-					if(null!=mList && mList.size()>0){
-						m.put("img", mList.get(0));
-					}
+					m.put("thumbnail", source.get("thumbnail"));
 				}
 				film.add(m);
 			}

@@ -24,8 +24,7 @@ public class CommonExceptionHandler implements HandlerExceptionResolver{
 		}else{
 			failModelAndView.addObject(BaseController.COMMON_FAIL_ALERT_KEY, "系统异常处理");
 		}
-		
-		exception.printStackTrace();
+		logger.debug(exception.getMessage());
 		return failModelAndView;
 	}
 }

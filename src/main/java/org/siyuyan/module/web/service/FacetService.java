@@ -44,7 +44,7 @@ public class FacetService {
 	 */
 	public List<HashMap<String, Integer>> facetCategory(int size){
 		HashMap<String, String> map = new HashMap<>();
-		map.put("f", "t");
+		map.put("f", "category");
 		SearchResponse sr = searcher.facet(map,null,size);
 		Facet f = sr.getFacets().facetsAsMap().get("f");
 		if(f!=null)
@@ -61,9 +61,9 @@ public class FacetService {
 	 */
 	public List<HashMap<String, Integer>> facetSubcategory(String category,int size){
 		HashMap<String, String> map = new HashMap<>();
-		map.put("f", "lb");
+		map.put("f", "type");
 		HashMap<String, Object> q = new HashMap<>();
-		q.put("t", category);
+		q.put("category", category);
 		SearchResponse sr = searcher.facet(map,q,size);
 		Facet f = sr.getFacets().facetsAsMap().get("f");
 		if(f!=null)

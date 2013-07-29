@@ -19,9 +19,9 @@ import org.springframework.web.bind.annotation.InitBinder;
 @Controller("baseController")	// 没有这个注解也可以，起作用的是继承它的子类的注解
 public class BaseController {
 	
-	public static final String COMMON_FAIL_PAGE = "/error/e-500";
-	public static final String COMMON_FAIL_ALERT_KEY = "/error/e-500";
-	public static final String USER_SESSION_KEY = "/error/e-500";
+	public static final String COMMON_FAIL_PAGE = "/html/500";
+	public static final String COMMON_FAIL_ALERT_KEY = "/html/500";
+	public static final String USER_SESSION_KEY = "/html/500";
 	
 	/**
 	 * 整理前台参数

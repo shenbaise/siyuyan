@@ -17,6 +17,7 @@
  */
 package org.siyuyan.utils;
 
+import org.apache.commons.lang3.StringUtils;
 import org.siyuyan.module.web.common.Constant;
 
 /**
@@ -33,6 +34,10 @@ public class Pagination {
 	private int totalPages = 10000;
 	private PaginationSize pSize = PaginationSize.defaultSize;
 	private PagiationPosition position = PagiationPosition.center;
+	/**
+	 * 查询关键字
+	 */
+	private String wd;
 
 	public Pagination() {
 	}
@@ -114,6 +119,14 @@ public class Pagination {
 	public void setTotal(int total) {
 		this.total = total;
 	}
+	
+	public String getWd() {
+		return wd;
+	}
+
+	public void setWd(String wd) {
+		this.wd = StringUtils.isBlank(wd)?"":wd;
+	}
 
 	/**
 	 * 获得分页信息
@@ -156,7 +169,7 @@ public class Pagination {
 		if(page==1){
 			sb.append("<li class=\"disabled\"> <a>上一页</a> </li>");
 		}else {
-			sb.append("<li> <a href=\"?page="+(page-1)+"\">上一页</a> </li>");
+			sb.append("<li> <a href=\"?page="+(page-1)+"&wd="+wd+"\">上一页</a> </li>");
 		}
 		// 页码
 		
@@ -172,9 +185,9 @@ public class Pagination {
 			start = n - group;
 		for(;start<=n;start++){
 			if(start == page){
-				sb.append("<li class=\"active\"> <a href=\"?page="+start + "\">"+ start +"</a></li>");
+				sb.append("<li class=\"active\"> <a href=\"?page="+start +"&wd="+wd+ "\">"+ start +"</a></li>");
 			}else {
-				sb.append("<li> <a href=\"?page="+start + "\">"+ start +"</a></li>");
+				sb.append("<li> <a href=\"?page="+start +"&wd="+wd+ "\">"+ start +"</a></li>");
 			}
 		}
 		
@@ -183,7 +196,7 @@ public class Pagination {
 		if(page>=totalPages){
 			sb.append("<li class=\"disabled\"> <a>下一页</a> </li>");
 		}else {
-			sb.append("<li> <a href=\"?page="+(page+1)+"\">下一页</a> </li>");
+			sb.append("<li> <a href=\"?page="+(page+1)+"&wd="+wd+"\">下一页</a> </li>");
 		}
 		sb.append("</ul></div>");
 		return sb.toString();

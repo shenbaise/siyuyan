@@ -47,6 +47,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.google.common.base.CharMatcher;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -80,7 +81,7 @@ public class HomeController extends BaseController {
 
 		// 首页facet，按大类分，默认是安装count排序的
 		HashMap<String, String> map = Maps.newHashMap();
-		map.put("f", "t");
+		map.put("f", "category");
 		sr = searcher.facet(map, null, 15);
 		Facet f = sr.getFacets().facetsAsMap().get("f");
 		request.setAttribute("catgoryName", "分类");
@@ -88,24 +89,26 @@ public class HomeController extends BaseController {
 
 		// 电影
 		HashMap<String, Object> query = new HashMap<>();
-		query.put("t", "电影");
-		sr = searcher.query(query, "nd", SortOrder.DESC, 0, 3);
+		query.put("category", "电影");
+		sr = searcher.query(query, "year", SortOrder.DESC, 0, 3);
 		SearchHit[] sh = sr.getHits().getHits();
 		List<HashMap<String, Object>> film = Lists.newArrayList();
 		for (SearchHit h : sh) {
 			HashMap<String, Object> m = new HashMap<>();
-			m.put("name", h.getId());
+			// 转换斜杠，否则Url不认
+			String name = h.getId();
+			if(name.contains("/")){
+				name = CharMatcher.anyOf("/").replaceFrom(name, "|");
+			}
+			m.put("name", name);
 			Map<String, Object> source = h.getSource();
 			if (null != source) {
 				HashMap<String, Object> dList = (HashMap<String, Object>) source
-						.get("d");
+						.get("download");
 				if (null != dList && dList.size() > 0) {
-					m.put("d", dList);
+					m.put("download", dList);
 				}
-				List<String> mList = (List<String>) source.get("img");
-				if (null != mList && mList.size() > 0) {
-					m.put("img", mList.get(0));
-				}
+				m.put("thumbnail", source.get("thumbnail"));
 			}
 			film.add(m);
 		}
@@ -113,24 +116,26 @@ public class HomeController extends BaseController {
 
 		// 电视剧
 		HashMap<String, Object> query2 = new HashMap<>();
-		query2.put("t", "电视剧");
-		sr = searcher.query(query2, "nd", SortOrder.DESC, 0, 3);
+		query2.put("category", "电视剧");
+		sr = searcher.query(query2, "year", SortOrder.DESC, 0, 3);
 		sh = sr.getHits().getHits();
 		List<HashMap<String, Object>> tv = new ArrayList<>();
 		for (SearchHit h : sh) {
 			HashMap<String, Object> m = Maps.newHashMap();
-			m.put("name", h.getId());
+			// 转换斜杠，否则Url不认
+			String name = h.getId();
+			if(name.contains("/")){
+				name = CharMatcher.anyOf("/").replaceFrom(name, "|");
+			}
+			m.put("name", name);
 			Map<String, Object> source = h.getSource();
 			if (null != source) {
 				HashMap<String, Object> dList = (HashMap<String, Object>) source
-						.get("d");
+						.get("download");
 				if (null != dList && dList.size() > 0) {
-					m.put("d", dList);
+					m.put("download", dList);
 				}
-				List<String> mList = (List<String>) source.get("img");
-				if (null != mList && mList.size() > 0) {
-					m.put("img", mList.get(0));
-				}
+				m.put("thumbnail",source.get("thumbnail"));
 			}
 
 			tv.add(m);
@@ -139,28 +144,26 @@ public class HomeController extends BaseController {
 
 		// 综艺
 		HashMap<String, Object> query3 = new HashMap<>();
-		query3.put("t", "综艺");
-		sr = searcher.query(query3, "nd", SortOrder.DESC, 0, 3);
+		query3.put("category", "综艺");
+		sr = searcher.query(query3, "year", SortOrder.DESC, 0, 3);
 		sh = sr.getHits().getHits();
 		List<HashMap<String, Object>> zy = Lists.newArrayList();
 		for (SearchHit h : sh) {
 			HashMap<String, Object> m = new HashMap<>();
-			m.put("name", h.getId());
+			// 转换斜杠，否则Url不认
+			String name = h.getId();
+			if(name.contains("/")){
+				name = CharMatcher.anyOf("/").replaceFrom(name, "|");
+			}
+			m.put("name", name);
 			Map<String, Object> source = h.getSource();
 			if (null != source) {
 				HashMap<String, Object> dList = (HashMap<String, Object>) source
-						.get("d");
+						.get("download");
 				if (null != dList && dList.size() > 0) {
-					m.put("d", dList);
+					m.put("download", dList);
 				}
-				List<String> mList = (List<String>) source.get("img");
-				if (null != mList && mList.size() > 0) {
-
-					m.put("img", mList.get(0));
-					if (mList.size() > 1) {
-						m.put("img", mList.get(1));
-					}
-				}
+				m.put("thumbnail",source.get("thumbnail"));
 			}
 
 			zy.add(m);
@@ -181,7 +184,7 @@ public class HomeController extends BaseController {
 			}
 			// 电影
 			HashMap<String, Object> query = new HashMap<>();
-			query.put("t", category);
+			query.put("category", category);
 			SearchResponse sr = searcher.query(query, "_timestamp",
 					SortOrder.DESC,
 					getStartPage(page = getPage(page), size = getSize(size)),
@@ -190,18 +193,21 @@ public class HomeController extends BaseController {
 			List<HashMap<String, Object>> film = Lists.newArrayList();
 			for (SearchHit h : sh) {
 				HashMap<String, Object> m = new HashMap<>();
-				m.put("name", h.getId());
+				// 转换斜杠，否则Url不认
+				String name = h.getId();
+				if(name.contains("/")){
+					name = CharMatcher.anyOf("/").replaceFrom(name, "|");
+				}
+				m.put("name", name);
+				
 				Map<String, Object> source = h.getSource();
 				if (null != source) {
 					HashMap<String, Object> dList = (HashMap<String, Object>) source
-							.get("d");
+							.get("download");
 					if (null != dList && dList.size() > 0) {
-						m.put("d", dList);
+						m.put("download", dList);
 					}
-					List<String> mList = (List<String>) source.get("img");
-					if (null != mList && mList.size() > 0) {
-						m.put("img", mList.get(0));
-					}
+					m.put("thumbnail",source.get("thumbnail"));
 				}
 				film.add(m);
 			}
@@ -236,7 +242,7 @@ public class HomeController extends BaseController {
 			HttpServletResponse response) throws Exception {
 		// 最新电影
 		HashMap<String, Object> query = new HashMap<>();
-		query.put("t", "电影");
+		query.put("category", "电影");
 		SearchResponse sr = searcher.query(query, "_timestamp", SortOrder.DESC,
 				getStartPage(page = getPage(page), size = getSize(size)),
 				size);
@@ -244,18 +250,21 @@ public class HomeController extends BaseController {
 		List<HashMap<String, Object>> film = new ArrayList<>();
 		for (SearchHit h : sh) {
 			HashMap<String, Object> m = new HashMap<>();
-			m.put("name", h.getId());
+			// 转换斜杠，否则Url不认
+			String name = h.getId();
+			if(name.contains("/")){
+				name = CharMatcher.anyOf("/").replaceFrom(name, "|");
+			}
+			m.put("name", name);
+			
 			Map<String, Object> source = h.getSource();
 			if (null != source) {
 				HashMap<String, Object> dList = (HashMap<String, Object>) source
-						.get("d");
+						.get("download");
 				if (null != dList && dList.size() > 0) {
-					m.put("d", dList);
+					m.put("download", dList);
 				}
-				List<String> mList = (List<String>) source.get("img");
-				if (null != mList && mList.size() > 0) {
-					m.put("img", mList.get(0));
-				}
+				m.put("thumbnail",source.get("thumbnail"));
 			}
 			film.add(m);
 		}
@@ -294,26 +303,29 @@ public class HomeController extends BaseController {
 			HttpServletResponse response) throws Exception {
 		// 最热电影
 		HashMap<String, Object> query = new HashMap<>();
-		query.put("t", "电影");
-		SearchResponse sr = searcher.query(query, "nd", SortOrder.DESC, 
+		query.put("category", "电影");
+		SearchResponse sr = searcher.query(query, "year", SortOrder.DESC, 
 				getStartPage(page = getPage(page), size = getSize(size)),
 				size);
 		SearchHit[] sh = sr.getHits().getHits();
 		List<HashMap<String, Object>> film = new ArrayList<>();
 		for (SearchHit h : sh) {
 			HashMap<String, Object> m = new HashMap<>();
-			m.put("name", h.getId());
+			// 转换斜杠，否则Url不认
+			String name = h.getId();
+			if(name.contains("/")){
+				name = CharMatcher.anyOf("/").replaceFrom(name, "|");
+			}
+			m.put("name", name);
 			Map<String, Object> source = h.getSource();
 			if (null != source) {
 				HashMap<String, Object> dList = (HashMap<String, Object>) source
-						.get("d");
+						.get("download");
 				if (null != dList && dList.size() > 0) {
-					m.put("d", dList);
+					m.put("download", dList);
 				}
-				List<String> mList = (List<String>) source.get("img");
-				if (null != mList && mList.size() > 0) {
-					m.put("img", mList.get(0));
-				}
+				m.put("thumbnail",source.get("thumbnail"));
+				
 			}
 			film.add(m);
 		}

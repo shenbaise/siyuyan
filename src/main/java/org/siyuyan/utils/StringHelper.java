@@ -22,6 +22,8 @@ import java.net.URLDecoder;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.google.common.base.CharMatcher;
+
 /**
  * @author whiteme
  * @date 2013年7月25日
@@ -55,5 +57,13 @@ public class StringHelper {
 			e.printStackTrace();
 		}
 		return "";
+	}
+	/**
+	 * 删除特殊字符、字母、数字、空格
+	 * @param s
+	 * @return
+	 */
+	public static String removeAB12(String s){
+		return CharMatcher.anyOf("abcdefghijklmnopqrstuvwxyz;&ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.~!@#$%^&*()-+= 》《><?").removeFrom(s);
 	}
 }

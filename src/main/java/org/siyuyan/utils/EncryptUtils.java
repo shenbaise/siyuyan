@@ -23,14 +23,14 @@ public class EncryptUtils {
 	/**
 	 * 用于混淆的字符串
 	 */
-	public String mix = "";
+	private static String mix = "!@SFDS$$#$^%JVJDfgfd&*ghfhg*)(*_)+fdrte#$5gdwe234#@%SDDFGGFH!@@!";
 	/** 
      * 用MD5算法进行加密 
      * @param str 需要加密的字符串 
      * @return MD5加密后的结果 
      */  
-    public static String encodeMD5String(String str) {  
-        return encode(str, "MD5");  
+    public static String encodeMD5(String str) {  
+        return encode(str+mix, "MD5");  
     }  
   
     /** 
@@ -38,8 +38,8 @@ public class EncryptUtils {
      * @param str 需要加密的字符串 
      * @return SHA加密后的结果 
      */  
-    public static String encodeSHAString(String str) {  
-        return encode(str, "SHA");  
+    public static String encodeSHA(String str) {  
+        return encode(str+mix, "SHA");  
     }  
   
     /** 
@@ -47,7 +47,7 @@ public class EncryptUtils {
      * @param str 需要加密的字符串 
      * @return base64加密后的结果 
      */  
-    public static String encodeBase64String(String str) {  
+    public static String encodeBase64(String str) {  
         BASE64Encoder encoder =  new BASE64Encoder();  
         return encoder.encode(str.getBytes());  
     }  
@@ -58,7 +58,7 @@ public class EncryptUtils {
      * @return base64解密后的结果 
      * @throws IOException  
      */  
-    public static String decodeBase64String(String str) throws IOException {  
+    public static String decodeBase64(String str) throws IOException {  
         BASE64Decoder encoder =  new BASE64Decoder();  
         return new String(encoder.decodeBuffer(str));  
     }  
@@ -79,11 +79,11 @@ public class EncryptUtils {
     public static void main(String[] args) throws IOException {  
         String user = "oneadmin";  
         System.out.println("原始字符串 " + user);  
-        System.out.println("MD5加密 " + encodeMD5String(user));  
-        System.out.println("SHA加密 " + encodeSHAString(user));  
-        String base64Str = encodeBase64String(user);  
+        System.out.println("MD5加密 " + encodeMD5(user));  
+        System.out.println("SHA加密 " + encodeSHA(user));  
+        String base64Str = encodeBase64(user);  
         System.out.println("Base64加密 " + base64Str);  
-        System.out.println("Base64解密 " + decodeBase64String(base64Str));
+        System.out.println("Base64解密 " + decodeBase64(base64Str));
         
         
     }  

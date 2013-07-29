@@ -28,7 +28,7 @@ import com.google.common.collect.Maps;
  */
 public class Constants {
 	
-	private static HashMap<String, String> infoName = Maps.newHashMap();
+	public static HashMap<String, String> infoName = Maps.newHashMap();
 	static {
 		infoName.put("片名", "title");
 		infoName.put("译名", "translation");

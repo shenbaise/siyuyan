@@ -31,7 +31,10 @@ import org.apache.commons.lang3.StringUtils;
 public class Movie {
 	public Movie() {
 	}
-
+	/**
+	 * 资源源地址
+	 */
+	private String url;
 	/**
 	 * 主键，使用片名或者片名的拼音
 	 */

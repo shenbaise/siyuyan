@@ -17,36 +17,35 @@
  */
 package org.siyuyan.es;
 
-import static org.elasticsearch.index.query.QueryBuilders.*;
+import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
+import static org.elasticsearch.index.query.QueryBuilders.fieldQuery;
+import static org.elasticsearch.index.query.QueryBuilders.matchAllQuery;
+import static org.elasticsearch.index.query.QueryBuilders.matchQuery;
+import static org.elasticsearch.index.query.QueryBuilders.termQuery;
 import static org.elasticsearch.search.facet.FacetBuilders.termsFacet;
 
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.lucene.search.vectorhighlight.FieldQuery;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilder;
-import org.elasticsearch.search.facet.FacetBuilders;
-import org.elasticsearch.search.facet.FacetBuilders.*;
-import org.elasticsearch.search.facet.terms.TermsFacet;
-import org.elasticsearch.search.facet.terms.TermsFacet.ComparatorType;
 import org.elasticsearch.search.sort.SortOrder;
+import org.springframework.stereotype.Service;
 
 /**
  * @author whiteme
  * @date 2013年7月17日
  * @desc 查询工具
  */
+@Service(value="searcher")
 public class Searcher {
 
 	private Log log = LogFactory.getLog(this.getClass());
@@ -106,7 +105,17 @@ public class Searcher {
 				.actionGet();
 		return response.isExists();
 	}
-
+	/**
+	 * get document
+	 * @param index
+	 * @param type
+	 * @param id
+	 * @return
+	 */
+	public GetResponse get(String index,String type,String id){
+		return client.prepareGet(index, type, id).execute()
+		.actionGet();
+	}
 	/**
 	 * @param map
 	 * @return 查询
@@ -138,16 +147,22 @@ public class Searcher {
 	 */
 	public SearchResponse query(HashMap<String, Object> query,
 			String sortField, SortOrder order, int from, int size) {
-
 		BoolQueryBuilder qb = boolQuery();
-		Set<Entry<String, Object>> sets = query.entrySet();
-		for (Entry<String, Object> entry : sets) {
-			qb.must(fieldQuery(entry.getKey(), entry.getValue()));
+		if(null==query || query.size()==0){
+			qb.must(matchAllQuery());
+		}else{
+			Set<Entry<String, Object>> sets = query.entrySet();
+			for (Entry<String, Object> entry : sets) {
+				qb.must(fieldQuery(entry.getKey(), entry.getValue()));
+			}
 		}
-		SearchRequestBuilder sqb = client.prepareSearch().setQuery(qb)
-				.addSort(sortField, order).setSize(size).setFrom(from);
+		SearchRequestBuilder sqb = client.prepareSearch().setQuery(qb).setSize(size).setFrom(from);
+				if(StringUtils.isNotBlank(sortField) && null!=order){
+					sqb.addSort(sortField, order);
+				}
 		try {
 			SearchResponse searchResponse = sqb.execute().get();
+			log.debug(searchResponse.toString());
 			return searchResponse;
 		} catch (InterruptedException | ExecutionException e) {
 			e.printStackTrace();

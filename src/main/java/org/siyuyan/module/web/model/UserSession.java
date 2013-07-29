@@ -15,20 +15,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.siyuyan.module.web.common;
+package org.siyuyan.module.web.model;
+
+import java.util.List;
 
 /**
  * @author whiteme
- * @date 2013年7月23日
- * @desc 系统常量
+ * @date 2013年7月28日
+ * @desc user session
  */
-public class Constant {
+public class UserSession {
 	
-	public static int defaultPageSize = 20;
-	public static int defaultPageGroup = 10;
-	
-	public static final String movieIndex = "movie";
-	public static final String type = "0";
-	public static final String userIndex = "user";
-	
-}	
+	// 基本
+		private String id;
+		private String username;
+		private String password;
+		private String email;
+		// 详细
+		private int birth;	//仅存年份
+		private String gender;
+		private String eduacation;
+		private String job;
+		private String address;
+		private String phone;
+		// 其他各种补充信息全部放在hoby中
+		private List<String> hoby;
+}
