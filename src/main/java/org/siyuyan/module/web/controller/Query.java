@@ -17,18 +17,11 @@
  */
 package org.siyuyan.module.web.controller;
 
-import java.util.HashMap;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.client.Client;
 import org.siyuyan.core.BaseController;
-import org.siyuyan.es.ESClient;
-import org.siyuyan.es.Searcher;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -39,11 +32,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller("query")
 public class Query extends BaseController {
 	
-	private Searcher searcher = new Searcher();
 	
 	@RequestMapping(value="q")
 	public void query(HttpServletRequest request,HttpServletResponse response) throws Exception{
-		HashMap<String, Object> map2 = new HashMap<>();
 		
 	}
 }

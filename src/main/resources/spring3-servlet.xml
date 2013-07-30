@@ -21,11 +21,15 @@
 	<mvc:annotation-driven />
 	
 	<mvc:resources mapping="/static/**" location="/static/" />
-	
+	<mvc:resources mapping="/css/**"  location="/css/"/>
+	<mvc:resources mapping="/js/**"  location="/js/"/>
+	<mvc:resources mapping="/img/**"  location="/img/"/>
+	<mvc:resources mapping="/html/**"  location="/html/"/>
 	<mvc:default-servlet-handler/>
 	
-	<!-- 自定义exception处理 -->
-	<bean id="exceptionResolver" class="org.siyuyan.core.CommonExceptionHandler"/>	
+	<!-- 自定义exception处理
+	<bean id="exceptionResolver" class="org.siyuyan.core.CommonExceptionHandler"/>
+	 -->	
 	<!-- 国际化 -->
 	<bean id="message"
 		class="org.springframework.context.support.ResourceBundleMessageSource">

@@ -21,12 +21,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang3.CharUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
@@ -72,6 +70,7 @@ public class HomeController extends BaseController {
 	 * @throws Exception
 	 * @desc 首页
 	 */
+	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/")
 	public String home(HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
@@ -172,6 +171,7 @@ public class HomeController extends BaseController {
 		return "index";
 	}
 
+	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "{category}")
 	public String home2(@PathVariable String category, Integer page,
 			Integer size, HttpServletRequest request,
@@ -237,6 +237,7 @@ public class HomeController extends BaseController {
 		return category;
 	}
 
+	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "new")
 	public String film(Integer page, Integer size, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -298,6 +299,7 @@ public class HomeController extends BaseController {
 	 * @return
 	 * @throws Exception
 	 */
+	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "hot")
 	public String hot(Integer page, Integer size, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {

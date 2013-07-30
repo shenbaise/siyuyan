@@ -60,6 +60,7 @@ public class CategoryController extends BaseController {
 	private SearchResponseUtil util;
 
 	
+	@SuppressWarnings("unchecked")
 	@RequestMapping(value="/category/{t}/{lb}",method=RequestMethod.GET)
 	public String category(@PathVariable String t,@PathVariable String lb,
 			Integer page,Integer size,HttpServletRequest request,HttpServletResponse response) throws Exception{

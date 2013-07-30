@@ -28,14 +28,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
-import org.elasticsearch.search.sort.SortOrder;
 import org.siyuyan.core.BaseController;
 import org.siyuyan.es.Searcher;
 import org.siyuyan.module.web.common.Constant;
 import org.siyuyan.utils.Pagination;
 import org.siyuyan.utils.SearchResponseUtil;
 import org.siyuyan.utils.StringHelper;
-import org.siyuyan.utils.UrlMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -63,6 +61,7 @@ public class SearchController extends BaseController {
 	 * @return
 	 * @throws Exception
 	 */
+	@SuppressWarnings("unchecked")
 	@RequestMapping(value="s")
 	public String search(String wd,Integer page,Integer size,HttpServletRequest request,HttpServletResponse response) throws Exception{
 		wd = StringHelper.isoToUtf8(wd);
