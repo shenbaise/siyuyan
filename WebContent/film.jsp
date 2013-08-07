@@ -40,7 +40,7 @@
 			</c:if>
 				<li class="span3">
 					<div class="thumbnail hover_img">
-						<img alt="300x200" src="${ctx}/static/simple.jpg" class="img-rounded">
+						<img alt="300x200" src="${ctx}/images/${item.thumbnail}" class="img-rounded">
 						<div class="caption">
 								${item.name }
 							<p>
