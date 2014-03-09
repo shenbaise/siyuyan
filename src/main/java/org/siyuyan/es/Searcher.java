@@ -162,7 +162,6 @@ public class Searcher {
 				}
 		try {
 			SearchResponse searchResponse = sqb.execute().get();
-			log.debug(searchResponse.toString());
 			return searchResponse;
 		} catch (InterruptedException | ExecutionException e) {
 			e.printStackTrace();
@@ -175,8 +174,18 @@ public class Searcher {
 	 * @return
 	 * @desc 返回热门电影
 	 */
-	public SearchResponse hotMovies() {
-		
+	public SearchResponse hotMovies(int size) {
+		SearchRequestBuilder sqb = client.prepareSearch()
+				.setQuery(termQuery("t", "电影"))
+				// .addFields("d","gj")
+				.addSort("score", SortOrder.DESC).setSize(size).setFrom(0);
+		SearchResponse searchResponse;
+		try {
+			searchResponse = sqb.execute().get();
+			return searchResponse;
+		} catch (InterruptedException | ExecutionException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 

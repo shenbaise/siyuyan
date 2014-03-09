@@ -20,6 +20,7 @@ package org.siyuyan.utils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
@@ -42,10 +43,10 @@ public class SearchResponseUtil {
 		List<HashMap<String,Object>> list = new ArrayList<>();
 		SearchHit[] sh = sr.getHits().getHits();
 		for(SearchHit h:sh){
-			HashMap<String, Object> m = new HashMap<>();
-			m.put("name", h.getId());
-			m.putAll(h.getSource());
-			list.add(m);
+			Map<String, Object> source = h.getSource();
+			source.put("id", h.getId());
+			System.out.println(source);
+			list.add((HashMap<String, Object>) source);
 		}
 		return list;
 	}

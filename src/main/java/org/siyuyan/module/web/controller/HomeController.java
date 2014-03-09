@@ -22,6 +22,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -35,11 +37,8 @@ import org.siyuyan.core.BaseController;
 import org.siyuyan.es.Searcher;
 import org.siyuyan.module.web.common.Constant;
 import org.siyuyan.module.web.service.FacetService;
-import org.siyuyan.utils.CharUtil;
 import org.siyuyan.utils.Pagination;
 import org.siyuyan.utils.SearchResponseUtil;
-import org.siyuyan.utils.StringHelper;
-import org.siyuyan.utils.UrlMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -64,16 +63,14 @@ public class HomeController extends BaseController {
 	private SearchResponseUtil util;
 
 	/**
+	 * 显示主页信息--home page
 	 * @param request
 	 * @param response
 	 * @return
 	 * @throws Exception
-	 * @desc 首页
 	 */
-	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/")
-	public String home(HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
+	public String home(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		// 最近收录的影片
 		SearchResponse sr = searcher.newMovies(10);
 		request.setAttribute("newFilm", util.processSearchRespons(sr));
@@ -89,209 +86,64 @@ public class HomeController extends BaseController {
 		// 电影
 		HashMap<String, Object> query = new HashMap<>();
 		query.put("category", "电影");
-		sr = searcher.query(query, "year", SortOrder.DESC, 0, 3);
-		SearchHit[] sh = sr.getHits().getHits();
-		List<HashMap<String, Object>> film = Lists.newArrayList();
-		for (SearchHit h : sh) {
-			HashMap<String, Object> m = new HashMap<>();
-			// 转换斜杠，否则Url不认
-			String name = h.getId();
-			if(name.contains("/")){
-				name = CharMatcher.anyOf("/").replaceFrom(name, "|");
-			}
-			m.put("name", name);
-			Map<String, Object> source = h.getSource();
-			if (null != source) {
-				HashMap<String, Object> dList = (HashMap<String, Object>) source
-						.get("download");
-				if (null != dList && dList.size() > 0) {
-					m.put("download", dList);
-				}
-				m.put("thumbnail", source.get("thumbnail"));
-			}
-			film.add(m);
-		}
-		request.setAttribute("film", film);
-
+		sr = searcher.query(query, "year", SortOrder.DESC, 0, 6);
+		request.setAttribute("film", util.processSearchRespons(sr));
 		// 电视剧
 		HashMap<String, Object> query2 = new HashMap<>();
 		query2.put("category", "电视剧");
-		sr = searcher.query(query2, "year", SortOrder.DESC, 0, 3);
-		sh = sr.getHits().getHits();
-		List<HashMap<String, Object>> tv = new ArrayList<>();
-		for (SearchHit h : sh) {
-			HashMap<String, Object> m = Maps.newHashMap();
-			// 转换斜杠，否则Url不认
-			String name = h.getId();
-			if(name.contains("/")){
-				name = CharMatcher.anyOf("/").replaceFrom(name, "|");
-			}
-			m.put("name", name);
-			Map<String, Object> source = h.getSource();
-			if (null != source) {
-				HashMap<String, Object> dList = (HashMap<String, Object>) source
-						.get("download");
-				if (null != dList && dList.size() > 0) {
-					m.put("download", dList);
-				}
-				m.put("thumbnail",source.get("thumbnail"));
-			}
-
-			tv.add(m);
-		}
-		request.setAttribute("tv", tv);
+		sr = searcher.query(query2, "year", SortOrder.DESC, 0, 6);
+		request.setAttribute("tv", util.processSearchRespons(sr));
 
 		// 综艺
 		HashMap<String, Object> query3 = new HashMap<>();
 		query3.put("category", "综艺");
-		sr = searcher.query(query3, "year", SortOrder.DESC, 0, 3);
-		sh = sr.getHits().getHits();
-		List<HashMap<String, Object>> zy = Lists.newArrayList();
-		for (SearchHit h : sh) {
-			HashMap<String, Object> m = new HashMap<>();
-			// 转换斜杠，否则Url不认
-			String name = h.getId();
-			if(name.contains("/")){
-				name = CharMatcher.anyOf("/").replaceFrom(name, "|");
-			}
-			m.put("name", name);
-			Map<String, Object> source = h.getSource();
-			if (null != source) {
-				HashMap<String, Object> dList = (HashMap<String, Object>) source
-						.get("download");
-				if (null != dList && dList.size() > 0) {
-					m.put("download", dList);
-				}
-				m.put("thumbnail",source.get("thumbnail"));
-			}
-
-			zy.add(m);
-		}
-		request.setAttribute("zy", zy);
+		sr = searcher.query(query3, "year", SortOrder.DESC, 0, 6);
+		request.setAttribute("zy", util.processSearchRespons(sr));
 		return "index";
 	}
-
-	@SuppressWarnings("unchecked")
-	@RequestMapping(value = "{category}")
-	public String home2(@PathVariable String category, Integer page,
-			Integer size, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
-		
+	
+	/**
+	 * 视频分栏
+	 * @param category
+	 * @param page
+	 * @param size
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "category/{category}")
+	public String category(@PathVariable String category, Integer page, Integer size, 
+			ServletRequest request, ServletResponse response) throws Exception {
 		if (StringUtils.isNotBlank(category)) {
-			category = StringHelper.isoToUtf8(category);
-			if (!CharUtil.isChinese(category)) {
-				category = UrlMapper.get(category);
-			}
-			// 电影
+			request.setAttribute("category", category);
 			HashMap<String, Object> query = new HashMap<>();
 			query.put("category", category);
-			SearchResponse sr = searcher.query(query, "_timestamp",
-					SortOrder.DESC,
-					getStartPage(page = getPage(page), size = getSize(size)),
-					size);
-			SearchHit[] sh = sr.getHits().getHits();
-			List<HashMap<String, Object>> film = Lists.newArrayList();
-			for (SearchHit h : sh) {
-				HashMap<String, Object> m = new HashMap<>();
-				// 转换斜杠，否则Url不认
-				String name = h.getId();
-				if(name.contains("/")){
-					name = CharMatcher.anyOf("/").replaceFrom(name, "|");
-				}
-				m.put("name", name);
-				
-				Map<String, Object> source = h.getSource();
-				if (null != source) {
-					HashMap<String, Object> dList = (HashMap<String, Object>) source
-							.get("download");
-					if (null != dList && dList.size() > 0) {
-						m.put("download", dList);
-					}
-					m.put("thumbnail",source.get("thumbnail"));
-				}
-				film.add(m);
-			}
-			
+			SearchResponse sr = searcher.query(query, "_timestamp", SortOrder.DESC, getStartPage(page = getPage(page), size = getSize(size)), size);
+			List<HashMap<String, Object>> film = util.processSearchRespons(sr);
 			// 分页信息
 			int total = (int) sr.getHits().totalHits();
 			int num = sr.getHits().getHits().length;
-			if(num==0)
+			if (num == 0)
 				total = 0;
 			Pagination pagination = new Pagination(Constant.defaultPageGroup, page, Constant.defaultPageSize, total);
 			request.setAttribute("pager", pagination.getPagination());
-						
+
 			// 最近收录的影片
 			sr = searcher.newMovies(10);
-			
 			request.setAttribute("film", film);
 			request.setAttribute("newFilm", util.processSearchRespons(sr));
 			// 首页facet，按类别分默认是安装count排序的
 			request.setAttribute("catgoryName", "分类");
-			request.setAttribute("facet",
-					facetService.facetSubcategory(category, 15));
+			request.setAttribute("facet", facetService.facetSubcategory(category, 15));
 			request.setAttribute("page", page);
 		}
-		
-		if (CharUtil.isChinese(category))
-			category = UrlMapper.get(category);
-		return category;
-	}
 
-	@SuppressWarnings("unchecked")
-	@RequestMapping(value = "new")
-	public String film(Integer page, Integer size, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
-		// 最新电影
-		HashMap<String, Object> query = new HashMap<>();
-		query.put("category", "电影");
-		SearchResponse sr = searcher.query(query, "_timestamp", SortOrder.DESC,
-				getStartPage(page = getPage(page), size = getSize(size)),
-				size);
-		SearchHit[] sh = sr.getHits().getHits();
-		List<HashMap<String, Object>> film = new ArrayList<>();
-		for (SearchHit h : sh) {
-			HashMap<String, Object> m = new HashMap<>();
-			// 转换斜杠，否则Url不认
-			String name = h.getId();
-			if(name.contains("/")){
-				name = CharMatcher.anyOf("/").replaceFrom(name, "|");
-			}
-			m.put("name", name);
-			
-			Map<String, Object> source = h.getSource();
-			if (null != source) {
-				HashMap<String, Object> dList = (HashMap<String, Object>) source
-						.get("download");
-				if (null != dList && dList.size() > 0) {
-					m.put("download", dList);
-				}
-				m.put("thumbnail",source.get("thumbnail"));
-			}
-			film.add(m);
-		}
-		request.setAttribute("film", film);
-		// 分页信息
-		int total = (int) sr.getHits().totalHits();
-		int num = sr.getHits().getHits().length;
-		if(num==0)
-			total = 0;
-		Pagination pagination = new Pagination(Constant.defaultPageGroup, page, Constant.defaultPageSize, total);
-		request.setAttribute("pager", pagination.getPagination());
-		// 最近收录的影片
-		sr = searcher.newMovies(10);
-		request.setAttribute("newFilm", util.processSearchRespons(sr));
-
-		// 首页facet，按类别分默认是安装count排序的
-		request.setAttribute("catgoryName", "分类");
-		request.setAttribute("facet", facetService.facetSubcategory("电影", 15));
-		request.setAttribute("page", page);
-		
-		return "film";
+		return "category";
 	}
 
 	/**
-	 * 电视剧
-	 * 
+	 * 最新视频信息
 	 * @param page
 	 * @param size
 	 * @param request
@@ -300,42 +152,17 @@ public class HomeController extends BaseController {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	@RequestMapping(value = "hot")
-	public String hot(Integer page, Integer size, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
-		// 最热电影
+	@RequestMapping(value = "new")
+	public String film(Integer page, Integer size, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		// 最新电影
 		HashMap<String, Object> query = new HashMap<>();
 		query.put("category", "电影");
-		SearchResponse sr = searcher.query(query, "year", SortOrder.DESC, 
-				getStartPage(page = getPage(page), size = getSize(size)),
-				size);
-		SearchHit[] sh = sr.getHits().getHits();
-		List<HashMap<String, Object>> film = new ArrayList<>();
-		for (SearchHit h : sh) {
-			HashMap<String, Object> m = new HashMap<>();
-			// 转换斜杠，否则Url不认
-			String name = h.getId();
-			if(name.contains("/")){
-				name = CharMatcher.anyOf("/").replaceFrom(name, "|");
-			}
-			m.put("name", name);
-			Map<String, Object> source = h.getSource();
-			if (null != source) {
-				HashMap<String, Object> dList = (HashMap<String, Object>) source
-						.get("download");
-				if (null != dList && dList.size() > 0) {
-					m.put("download", dList);
-				}
-				m.put("thumbnail",source.get("thumbnail"));
-				
-			}
-			film.add(m);
-		}
-		request.setAttribute("film", film);
+		SearchResponse sr = searcher.query(query, "_timestamp", SortOrder.DESC, getStartPage(page = getPage(page), size = getSize(size)), size);
+		request.setAttribute("film", util.processSearchRespons(sr));
 		// 分页信息
 		int total = (int) sr.getHits().totalHits();
 		int num = sr.getHits().getHits().length;
-		if(num==0)
+		if (num == 0)
 			total = 0;
 		Pagination pagination = new Pagination(Constant.defaultPageGroup, page, Constant.defaultPageSize, total);
 		request.setAttribute("pager", pagination.getPagination());
@@ -347,7 +174,42 @@ public class HomeController extends BaseController {
 		request.setAttribute("catgoryName", "分类");
 		request.setAttribute("facet", facetService.facetSubcategory("电影", 15));
 		request.setAttribute("page", page);
-		
+
+		return "film";
+	}
+
+	/**
+	 * 最热视频
+	 * @param page
+	 * @param size
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "hot")
+	public String hot(Integer page, Integer size, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		// 最热电影
+		HashMap<String, Object> query = new HashMap<>();
+		query.put("category", "电影");
+		SearchResponse sr = searcher.query(query, "year", SortOrder.DESC, getStartPage(page = getPage(page), size = getSize(size)), size);
+		request.setAttribute("film", util.processSearchRespons(sr));
+		// 分页信息
+		int total = (int) sr.getHits().totalHits();
+		int num = sr.getHits().getHits().length;
+		if (num == 0)
+			total = 0;
+		Pagination pagination = new Pagination(Constant.defaultPageGroup, page, Constant.defaultPageSize, total);
+		request.setAttribute("pager", pagination.getPagination());
+		// 最近收录的影片
+		sr = searcher.newMovies(10);
+		request.setAttribute("newFilm", util.processSearchRespons(sr));
+
+		// 首页facet，按类别分默认是安装count排序的
+		request.setAttribute("catgoryName", "分类");
+		request.setAttribute("facet", facetService.facetSubcategory("电影", 15));
+		request.setAttribute("page", page);
+
 		return "tv";
 	}
 

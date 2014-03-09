@@ -17,6 +17,8 @@
  */
 package org.siyuyan.module.web.controller;
 
+import java.awt.List;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -56,15 +58,13 @@ public class PlayController extends BaseController {
 	@RequestMapping(value="/play/{id}",method=RequestMethod.GET)
 	public String category(@PathVariable String id,HttpServletRequest request,HttpServletResponse response) throws Exception{
 		id = StringHelper.isoToUtf8(id);
-		if(StringUtils.isNotBlank(id)){
-			if(id.contains("|")){
-				id = CharMatcher.anyOf("|").replaceFrom(id, "/");
-			}
-		}
 		GetResponse get = searcher.get(Constant.movieIndex, Constant.type, id);
-		Map<String, Object> m = get.getSource();
-		
+		HashMap<String, Object> m = (HashMap<String, Object>) get.getSource();
+		m.put("id", get.getId());
 		request.setAttribute("movie", m);
+		java.util.List<String> p = (java.util.List<String>)m.get("play_url");
+		if(p!=null)
+			request.setAttribute("play_url", p.get(0));
 		return "show";
 	}
 }

@@ -33,6 +33,7 @@ public class UrlMapper {
 		mapper.put("zy", "综艺");
 		mapper.put("music", "音乐");
 		mapper.put("dm", "动漫");
+		
 		mapper.put("电影", "film");
 		mapper.put("电视剧", "tv");
 		mapper.put("综艺", "zy");

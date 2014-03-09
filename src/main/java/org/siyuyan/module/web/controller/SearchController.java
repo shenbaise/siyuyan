@@ -20,7 +20,6 @@ package org.siyuyan.module.web.controller;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,12 +32,9 @@ import org.siyuyan.es.Searcher;
 import org.siyuyan.module.web.common.Constant;
 import org.siyuyan.utils.Pagination;
 import org.siyuyan.utils.SearchResponseUtil;
-import org.siyuyan.utils.StringHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import com.google.common.base.CharMatcher;
 
 /**
  * @author whiteme
@@ -61,10 +57,8 @@ public class SearchController extends BaseController {
 	 * @return
 	 * @throws Exception
 	 */
-	@SuppressWarnings("unchecked")
 	@RequestMapping(value="s")
 	public String search(String wd,Integer page,Integer size,HttpServletRequest request,HttpServletResponse response) throws Exception{
-		wd = StringHelper.isoToUtf8(wd);
 		HashMap<String, Object> query = new HashMap<>();
 		if(StringUtils.isNotBlank(wd))
 			query.put("_all", wd);
@@ -79,21 +73,8 @@ public class SearchController extends BaseController {
 		SearchHit[] sh = sr.getHits().getHits();
 		List<HashMap<String,Object>> film = new ArrayList<>();
 		for(SearchHit h:sh){
-			HashMap<String, Object> m = new HashMap<>();
-			// 转换斜杠，否则Url不认
-			String name = h.getId();
-			if(name.contains("/")){
-				name = CharMatcher.anyOf("/").replaceFrom(name, "|");
-			}
-			m.put("name", name);
-			Map<String, Object> source = h.getSource();
-			if(null!=source){
-				HashMap<String, Object> dList = (HashMap<String, Object>) source.get("download");
-				if(null!=dList && dList.size()>0){
-					m.put("download", dList);
-				}
-				m.put("thumbnail", source.get("thumbnail"));
-			}
+			HashMap<String, Object> m = (HashMap<String, Object>) h.getSource();
+			m.put("id", h.getId());
 			film.add(m);
 		}
 		request.setAttribute("film", film);

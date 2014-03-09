@@ -1,5 +1,10 @@
 package org.siyuyan.core;
 
+import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.Rectangle;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyEditor;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -9,6 +14,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
+import org.elasticsearch.index.mapper.object.ObjectMapper.Nested;
 import org.siyuyan.module.web.common.Constant;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.beans.propertyeditors.CustomNumberEditor;
@@ -87,5 +93,67 @@ public class BaseController {
         dateFormat.setLenient(false);
         binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
         binder.registerCustomEditor(Long.class, new CustomNumberEditor(Long.class, false));
+        binder.registerCustomEditor(String.class, new PropertyEditor() {
+			private String v;
+			@Override
+			public boolean supportsCustomEditor() {
+				return false;
+			}
+			
+			@Override
+			public void setValue(Object arg0) {
+				v = String.valueOf(arg0);
+			}
+			
+			@Override
+			public void setAsText(String arg0) throws IllegalArgumentException {
+				v = String.valueOf(arg0);
+			}
+			
+			@Override
+			public void removePropertyChangeListener(PropertyChangeListener arg0) {
+				
+			}
+			
+			@Override
+			public void paintValue(Graphics arg0, Rectangle arg1) {
+				
+			}
+			
+			@Override
+			public boolean isPaintable() {
+				return false;
+			}
+			
+			@Override
+			public Object getValue() {
+				return v;
+			}
+			
+			@Override
+			public String[] getTags() {
+				return new String[]{v};
+			}
+			
+			@Override
+			public String getJavaInitializationString() {
+				return String.valueOf(v);
+			}
+			
+			@Override
+			public Component getCustomEditor() {
+				return null;
+			}
+			
+			@Override
+			public String getAsText() {
+				return String.valueOf(v);
+			}
+			
+			@Override
+			public void addPropertyChangeListener(PropertyChangeListener arg0) {
+				
+			}
+		});
     }
 }

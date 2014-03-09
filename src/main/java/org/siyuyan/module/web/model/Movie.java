@@ -17,8 +17,8 @@
  */
 package org.siyuyan.module.web.model;
 
+import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.TreeMap;
 
 import org.apache.commons.lang3.StringUtils;
@@ -36,7 +36,7 @@ public class Movie {
 	 */
 	private String url;
 	/**
-	 * 主键，使用片名或者片名的拼音
+	 * 主键，md5(url)
 	 */
 	private String id;
 	/**
@@ -66,7 +66,7 @@ public class Movie {
 	/**
 	 * 影片类型（动作、爱情、科幻等）
 	 */
-	private Set<String> type;
+	private LinkedHashSet<String> type;
 	/**
 	 * 集数
 	 */
@@ -82,7 +82,7 @@ public class Movie {
 	/**
 	 * 主演
 	 */
-	private Set<String> actors;
+	private LinkedHashSet<String> actors;
 	/**
 	 * 影片长度
 	 */
@@ -181,11 +181,11 @@ public class Movie {
 		this.category = category;
 	}
 
-	public Set<String> getType() {
+	public LinkedHashSet<String> getType() {
 		return type;
 	}
 
-	public void setType(Set<String> type) {
+	public void setType(LinkedHashSet<String> type) {
 		this.type = type;
 	}
 
@@ -213,11 +213,11 @@ public class Movie {
 		this.director = director;
 	}
 
-	public Set<String> getActors() {
+	public LinkedHashSet<String> getActors() {
 		return actors;
 	}
 
-	public void setActors(Set<String> actors) {
+	public void setActors(LinkedHashSet<String> actors) {
 		this.actors = actors;
 	}
 

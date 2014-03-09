@@ -14,5 +14,5 @@
 
 	<context:component-scan base-package="org.siyuyan.*" />
 	<aop:aspectj-autoproxy />
-	
+
 </beans>
