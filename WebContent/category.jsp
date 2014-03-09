@@ -8,7 +8,7 @@
 			<li class="nav-header">${catgoryName }</li>
 			<c:forEach var="item" items="${facet}">
 				<c:forEach var="item2" items="${item}">
-					<li><a href="${ctx }/category/music/${item2.key }">${item2.key }(${item2.value })</a>
+					<li><a href="${ctx }/category/${category}/${item2.key }">${item2.key }(${item2.value })</a>
 					</li>
 				</c:forEach>
 			</c:forEach>
@@ -30,29 +30,20 @@
 		<!-- 推荐影片 -->
 		<div class="navbar">
 			<div class="navbar-inner">
-				<div class="container-fluid">
-					<a href="#" class="brand">热门电影</a>
-					<div class="nav-collapse collapse navbar-responsive-collapse">
-						<ul class="nav pull-right">
-							<li class="divider-vertical" />
-							<li><a href="#">更多</a></li>
-						</ul>
-					</div>
-				</div>
+				<a class="brand" href="${ctx }/category/${category}">${category}</a> <span class="brand">&gt;</span> <a class="brand" href="${ctx }/category/${category}/${type}">${type}</a>
 			</div>
 		</div>
-
 		<c:forEach var="item" items="${film}" varStatus="i">
 			<c:if test="${i.index % 4 == 0 }">
 				<ul class="thumbnails">
 			</c:if>
 			<li class="span3">
-				<div class="thumbnail">
-					<img alt="300x200" src="${item.img }" class="img-rounded">
+				<div class="thumbnail hover_img">
+					<a href="${ctx }/play/${item.id }"><img alt="300x200" src="${ctx}/${item.thumbnail}"
+						class="img-rounded"></a>
 					<div class="caption">
-						<h4>${item.name }</h4>
 						<p>
-							<a class="btn btn-primary" href="${ctx }/play/${item.name }">播放</a>
+							<a href="${ctx }/play/${item.id }">${item.title }</a>
 						</p>
 					</div>
 				</div>
@@ -61,7 +52,9 @@
 				</ul>
 			</c:if>
 		</c:forEach>
+		<div class="span10">
 		${pager }
+		</div>
 	</div>
 
 	<!-- 右部 -->
